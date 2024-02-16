@@ -6,15 +6,17 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	tele "gopkg.in/telebot.v3"
 )
 
 func main() {
-	host := "url"
+	host := os.Getenv("HOST")
+
 	pref := tele.Settings{
-		Token: "Token Here",
+		Token: os.Getenv("TOKEN"),
 		Poller: &tele.LongPoller{
 			Timeout: 10 * time.Second,
 		},
@@ -28,6 +30,10 @@ func main() {
 
 	b.Handle("/start", func(c tele.Context) error {
 		return c.Send("Hello")
+	})
+
+	b.Handle("/help", func(c tele.Context) error {
+		return c.Send("Help")
 	})
 
 	mux := http.NewServeMux()
